@@ -466,9 +466,11 @@ HOME SUPERIOR CASAL, HOME TERREO FAMILIA, HOME TERREO SINGLE, HOME TERREO QUADRU
 HOME SUPERIOR TRIPLO, HOME SUPERIOR QUADRUPLO, EXTERNA TERREO CASAL,
 EXTERNA TERREO QUADRUPLO, EXTERNA TERREO FAMILIA, EXTERNA SUPERIOR QUADRUPLO
 
-Responda APENAS neste formato exato (sem nenhum texto adicional):
+IMPORTANTE: A primeira linha da resposta DEVE ser exatamente SUITE_KEY: seguido da chave. Sem texto antes.
 
-SUITE_KEY: [chave exata da suíte em maiúsculas]
+Formato obrigatório:
+
+SUITE_KEY: [CHAVE EXATA EM MAIÚSCULAS]
 ---
 Aqui está sua cotação:
 
@@ -538,10 +540,13 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
     else {
       const texto = data.content?.[0]?.text || '';
       // Extrair SUITE_KEY e mensagem
-      const keyMatch = texto.match(/SUITE_KEY:\s*([^\n]+)/);
-      if (keyMatch) suiteDetectada = keyMatch[1].trim();
-      const msgLimpa = texto.replace(/SUITE_KEY:[^\n]*\n?---?\n?/, '').trim();
-      const slug = SUITE_SLUGS[suiteDetectada.trim().toUpperCase()] || SUITE_SLUGS[suiteDetectada];
+      const keyMatch = texto.match(/SUITE_KEY:\s*([^\n\r]+)/);
+      if (keyMatch) suiteDetectada = keyMatch[1].trim().toUpperCase().replace(/[^A-Z\s]/g, '').trim();
+      console.log('Texto bruto IA:', texto.substring(0, 200));
+      console.log('Suite detectada após extração:', suiteDetectada);
+      const msgLimpa = texto.replace(/SUITE_KEY:[^\n]*[\n\r]*-{0,3}[\n\r]*/, '').trim();
+      const slug = SUITE_SLUGS[suiteDetectada] || SUITE_SLUGS[suiteDetectada.trim()];
+      console.log('Slug encontrado:', slug);
       const linkGaleria = slug ? '\n\n📸 Veja as fotos do seu quarto:\n' + GALERIA_BASE + '?suite=' + slug : '';
       document.getElementById('msg-box').textContent = msgLimpa + linkGaleria;
     }
