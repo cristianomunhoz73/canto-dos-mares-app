@@ -51,8 +51,6 @@ input:focus, select:focus, textarea:focus { border-color: #2e86c1; }
 .btn-reset { background: #f2f3f4; color: #555; }
 .btn-galeria { width: 100%; padding: 12px; border-radius: 10px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; background: linear-gradient(135deg, #C8962A, #D4A030); color: #1A1208; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
 .btn-galeria:hover { opacity: 0.9; transform: translateY(-1px); }
-.btn-galeria { flex: 1; padding: 11px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; background: linear-gradient(135deg, #C8962A, #D4A030); color: #1A1208; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
-.btn-galeria:hover { opacity: 0.9; transform: translateY(-1px); }
 .modo-row { display: flex; gap: 10px; margin-bottom: 18px; }
 .modo-btn { flex: 1; padding: 10px; border-radius: 10px; border: 2px solid #d6eaf8; background: #f4f9fd; color: #5d8aa8; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
 .modo-btn.active { background: #1a5276; border-color: #1a5276; color: #fff; }
@@ -620,7 +618,10 @@ function mostrarFotosResultado() {
 // ─── BOTÃO GALERIA ────────────────────────────────────────
 function atualizarBotaoGaleria() {
   const btn = document.getElementById('btn-galeria');
-  const slug = SUITE_SLUGS[suiteDetectada];
+  // Tenta encontrar o slug direto ou normalizando o valor
+  const chave = suiteDetectada.trim().toUpperCase();
+  const slug = SUITE_SLUGS[chave] || SUITE_SLUGS[suiteDetectada];
+  console.log('Suite detectada:', suiteDetectada, '| Slug:', slug);
   if (slug) {
     btn.href = GALERIA_BASE + '?suite=' + slug + '&origem=' + encodeURIComponent(window.location.href);
     btn.style.display = 'flex';
