@@ -92,16 +92,17 @@ body{
 .header-cats::-webkit-scrollbar{display:none}
 .cat-btn{
   display:flex;align-items:center;gap:5px;
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.12);
-  color:rgba(255,255,255,.8);
-  font-family:var(--fb);font-size:11px;font-weight:600;
-  padding:6px 12px;border-radius:20px;
+  background:rgba(200,150,42,.18);
+  border:1.5px solid rgba(200,150,42,.55);
+  color:var(--gold2);
+  font-family:var(--fb);font-size:12px;font-weight:700;
+  padding:7px 14px;border-radius:20px;
   cursor:pointer;transition:.2s;
   white-space:nowrap;text-decoration:none;flex-shrink:0;
+  letter-spacing:0.3px;
 }
-.cat-btn:hover{background:rgba(200,150,42,.2);border-color:rgba(200,150,42,.5);color:var(--gold)}
-.cat-btn.active{background:rgba(200,150,42,.15);border-color:var(--gold);color:var(--gold)}
+.cat-btn:hover{background:rgba(200,150,42,.35);border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+.cat-btn.active{background:var(--gold);border-color:var(--gold);color:#1A1208;font-weight:800;}
 
 /* ── RODAPÉ ── */
 .rodape{
@@ -356,6 +357,108 @@ main{padding-top:64px;min-height:100vh}
 }
 @keyframes pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.45)}50%{box-shadow:0 4px 32px rgba(37,211,102,.7)}}
 
+/* ── SIDEBAR ── */
+.sidebar{
+  position:fixed;top:64px;left:0;bottom:0;
+  width:200px;
+  background:rgba(9,17,31,.97);
+  border-right:1px solid rgba(255,255,255,.08);
+  padding:24px 12px;
+  display:flex;flex-direction:column;gap:6px;
+  z-index:100;
+  overflow-y:auto;
+}
+.sidebar-label{
+  font-family:var(--fm);font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;color:rgba(255,255,255,.3);
+  padding:0 8px;margin-bottom:4px;margin-top:8px;
+}
+.sidebar-btn{
+  display:flex;align-items:center;gap:10px;
+  background:transparent;
+  border:1px solid transparent;
+  color:rgba(255,255,255,.65);
+  font-family:var(--fb);font-size:13px;font-weight:600;
+  padding:10px 12px;border-radius:10px;
+  cursor:pointer;transition:.2s;
+  white-space:nowrap;text-decoration:none;
+  width:100%;
+}
+.sidebar-btn:hover{
+  background:rgba(200,150,42,.12);
+  border-color:rgba(200,150,42,.3);
+  color:var(--gold);
+}
+.sidebar-btn.active{
+  background:rgba(200,150,42,.18);
+  border-color:var(--gold);
+  color:var(--gold);
+  font-weight:700;
+}
+.sidebar-btn .s-icon{font-size:18px;flex-shrink:0}
+.sidebar-divider{
+  height:1px;background:rgba(255,255,255,.07);
+  margin:8px 0;
+}
+
+/* Empurrar conteúdo para a direita no desktop */
+@media(min-width:769px){
+  main{padding-left:200px}
+  .header-cats{display:none!important}
+}
+
+/* ── MENU FLUTUANTE MOBILE ── */
+.fab-menu{
+  display:none;
+  position:fixed;bottom:90px;left:20px;z-index:200;
+  background:var(--gold);color:#1A1208;
+  border:none;border-radius:50px;
+  padding:12px 18px;
+  font-size:13px;font-weight:800;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(200,150,42,.5);
+  align-items:center;gap:8px;
+  font-family:var(--fb);
+}
+.fab-menu svg{flex-shrink:0}
+
+/* DRAWER MOBILE */
+.drawer-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.7);z-index:300;
+}
+.drawer-overlay.open{display:block}
+.drawer{
+  position:fixed;left:0;top:0;bottom:0;
+  width:240px;
+  background:var(--noite);
+  border-right:1px solid rgba(255,255,255,.1);
+  padding:20px 12px;
+  z-index:301;
+  transform:translateX(-100%);
+  transition:transform .3s ease;
+  overflow-y:auto;
+}
+.drawer.open{transform:translateX(0)}
+.drawer-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;padding:0 8px;
+}
+.drawer-title{
+  font-family:var(--fd);font-size:16px;color:white;font-weight:700;
+}
+.drawer-close{
+  background:rgba(255,255,255,.1);border:none;
+  color:white;border-radius:50%;width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:16px;
+}
+
+@media(max-width:768px){
+  .sidebar{display:none}
+  .fab-menu{display:flex}
+}
+
 /* ── UTILITY ── */
 .hidden{display:none!important}
 </style>
@@ -382,6 +485,63 @@ main{padding-top:64px;min-height:100vh}
   </div>
   <span class="header-suite-name" id="headerSuiteName" style="flex-shrink:0"></span>
 </header>
+
+<!-- SIDEBAR DESKTOP -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-label">Fotos do Quarto</div>
+  <a class="sidebar-btn" id="sidebarSuiteBtn" href="#" data-type="suite">
+    <span class="s-icon">🛏️</span>
+    <span id="sidebarSuiteName">Seu Quarto</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-label">Conheça a Pousada</div>
+  <a class="sidebar-btn" href="?suite=areas-comuns" data-slug="areas-comuns">
+    <span class="s-icon">🏊</span> Áreas Comuns
+  </a>
+  <a class="sidebar-btn" href="?suite=belnedito-gastrobar" data-slug="belnedito-gastrobar">
+    <span class="s-icon">🍽️</span> GastroBar
+  </a>
+  <a class="sidebar-btn" href="?suite=pet-friendly" data-slug="pet-friendly">
+    <span class="s-icon">🐾</span> Pet Friendly
+  </a>
+  <a class="sidebar-btn" href="?suite=praia-entorno" data-slug="praia-entorno">
+    <span class="s-icon">🏖️</span> Praia & Entorno
+  </a>
+</aside>
+
+<!-- FAB MOBILE -->
+<button class="fab-menu" id="fabMenu" onclick="abrirDrawer()">
+  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  Ver mais fotos
+</button>
+
+<!-- DRAWER MOBILE -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="fecharDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">📸 Galerias</span>
+    <button class="drawer-close" onclick="fecharDrawer()">✕</button>
+  </div>
+  <div class="sidebar-label">Fotos do Quarto</div>
+  <a class="sidebar-btn" id="drawerSuiteBtn" href="#" data-type="suite">
+    <span class="s-icon">🛏️</span>
+    <span id="drawerSuiteName">Seu Quarto</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-label">Conheça a Pousada</div>
+  <a class="sidebar-btn" href="?suite=areas-comuns" data-slug="areas-comuns">
+    <span class="s-icon">🏊</span> Áreas Comuns
+  </a>
+  <a class="sidebar-btn" href="?suite=belnedito-gastrobar" data-slug="belnedito-gastrobar">
+    <span class="s-icon">🍽️</span> GastroBar
+  </a>
+  <a class="sidebar-btn" href="?suite=pet-friendly" data-slug="pet-friendly">
+    <span class="s-icon">🐾</span> Pet Friendly
+  </a>
+  <a class="sidebar-btn" href="?suite=praia-entorno" data-slug="praia-entorno">
+    <span class="s-icon">🏖️</span> Praia & Entorno
+  </a>
+</div>
 
 <main>
 
@@ -544,15 +704,57 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('suiteTitulo').textContent = nomeExibicao;
   document.getElementById('headerSuiteName').textContent = nomeExibicao;
 
-  // Marcar botão ativo + preservar origem nos links
+  // Marcar botão ativo no header (mobile fallback)
   document.querySelectorAll('.cat-btn').forEach(btn => {
     const slug = btn.dataset.slug;
     if (slug === suite) btn.classList.add('active');
-    // Preservar origem no link
     const url = new URL(btn.href, window.location.href);
     if (origem !== 'index.html') url.searchParams.set('origem', origem);
     btn.href = url.toString();
   });
+
+  // Configurar sidebar e drawer
+  const suiteBtnLabel = nomeExibicao;
+  // Nome curto para sidebar
+  const nomesCurtos = {
+    'externa-superior-quadruplo':'Ext. Sup. Quádruplo',
+    'externa-terreo-casal':'Ext. Térreo Casal',
+    'externa-terreo-familia':'Ext. Térreo Família',
+    'externa-terreo-quadruplo':'Ext. Térreo Quádruplo',
+    'home-superior-casal':'Home Sup. Casal',
+    'home-superior-quadruplo':'Home Sup. Quádruplo',
+    'home-superior-triplo':'Home Sup. Triplo',
+    'home-terreo-familia':'Home Tér. Família',
+    'home-terreo-quadruplo':'Home Tér. Quádruplo',
+    'areas-comuns':'Áreas Comuns',
+    'belnedito-gastrobar':'GastroBar',
+    'pet-friendly':'Pet Friendly',
+    'praia-entorno':'Praia & Entorno',
+  };
+  const nomeCurto = nomesCurtos[suite] || nomeExibicao;
+  document.getElementById('sidebarSuiteName').textContent = nomeCurto;
+  document.getElementById('drawerSuiteName').textContent = nomeCurto;
+
+  // Marcar ativo na sidebar e drawer + preservar origem
+  document.querySelectorAll('.sidebar-btn, .drawer .sidebar-btn').forEach(btn => {
+    const slug = btn.dataset.slug;
+    const type = btn.dataset.type;
+    if (slug === suite || (type === 'suite' && SUITE_NOMES[suite])) {
+      btn.classList.add('active');
+    }
+    if (btn.href && btn.href !== '#') {
+      try {
+        const url = new URL(btn.href, window.location.href);
+        if (origem !== 'index.html') url.searchParams.set('origem', origem);
+        btn.href = url.toString();
+      } catch(e) {}
+    }
+  });
+
+  // Botão "Seu quarto" aponta para a suite atual
+  const suiteUrl = 'galeria.html?suite=' + suite + (origem !== 'index.html' ? '&origem=' + encodeURIComponent(origem) : '');
+  document.getElementById('sidebarSuiteBtn').href = suiteUrl;
+  document.getElementById('drawerSuiteBtn').href = suiteUrl;
 
   carregarFotos(suite);
   initLightbox();
@@ -653,6 +855,18 @@ function atualizarLightbox() {
   document.getElementById('lightboxImg').alt = foto.nome;
   document.getElementById('lightboxCounter').textContent =
     (fotoAtualIdx + 1) + ' / ' + fotosAtivas.length;
+}
+
+// ── DRAWER MOBILE ────────────────────────────────────────
+function abrirDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function fecharDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ── HELPERS ──────────────────────────────────────────────
