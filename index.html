@@ -555,32 +555,7 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
   }
 }
 
-  // Café
-  const fCafe = fotosMemoria['cafe'] || [];
-  const bCafe = document.getElementById('bloco-cafe');
-  if (fCafe.length > 0) {
-    document.getElementById('res-cafe').innerHTML = fCafe.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('');
-    bCafe.style.display = 'block'; temAlguma = true;
-  } else { bCafe.style.display = 'none'; }
 
-  // Social
-  const fSocial = fotosMemoria['social'] || [];
-  const bSocial = document.getElementById('bloco-social');
-  if (fSocial.length > 0) {
-    document.getElementById('res-social').innerHTML = fSocial.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('');
-    bSocial.style.display = 'block'; temAlguma = true;
-  } else { bSocial.style.display = 'none'; }
-
-  // Piscina
-  const fPiscina = fotosMemoria['piscina'] || [];
-  const bPiscina = document.getElementById('bloco-piscina');
-  if (fPiscina.length > 0) {
-    document.getElementById('res-piscina').innerHTML = fPiscina.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('');
-    bPiscina.style.display = 'block'; temAlguma = true;
-  } else { bPiscina.style.display = 'none'; }
-
-  document.getElementById('fotos-resultado').style.display = temAlguma ? 'block' : 'none';
-}
 
 // ─── BOTÃO GALERIA ────────────────────────────────────────
 function atualizarBotaoGaleria() {
