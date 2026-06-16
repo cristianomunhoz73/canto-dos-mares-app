@@ -212,27 +212,7 @@ input:focus, select:focus, textarea:focus { border-color: #2e86c1; }
   <div class="card-title">✅ Mensagem Pronta</div>
   <div class="msg-box" id="msg-box"></div>
 
-  <!-- FOTOS DO RESULTADO -->
-  <div class="fotos-resultado" id="fotos-resultado" style="display:none">
-    <div style="font-size:13px;font-weight:700;color:#1a5276;margin-bottom:12px;padding-top:12px;border-top:2px solid #d6eaf8;">📷 Fotos para enviar junto</div>
-    <div id="bloco-suite" class="fotos-cat-block" style="display:none">
-      <div class="fotos-cat-label" id="label-suite">🛏️ Suíte</div>
-      <div class="fotos-grid" id="res-suite"></div>
-    </div>
-    <div id="bloco-cafe" class="fotos-cat-block" style="display:none">
-      <div class="fotos-cat-label">☕ Café da Manhã</div>
-      <div class="fotos-grid" id="res-cafe"></div>
-    </div>
-    <div id="bloco-social" class="fotos-cat-block" style="display:none">
-      <div class="fotos-cat-label">🎱 Área Social</div>
-      <div class="fotos-grid" id="res-social"></div>
-    </div>
-    <div id="bloco-piscina" class="fotos-cat-block" style="display:none">
-      <div class="fotos-cat-label">🏊 Piscina</div>
-      <div class="fotos-grid" id="res-piscina"></div>
-    </div>
-    <p style="font-size:11px;color:#888;margin-top:10px;">💡 Clique em cada foto para ampliar. Salve e envie pelo WhatsApp manualmente.</p>
-  </div>
+
 
   <div class="btn-row">
     <button class="btn-copy" id="btn-copy" onclick="copiar()">📋 Copiar Mensagem</button>
@@ -561,10 +541,11 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
       const keyMatch = texto.match(/SUITE_KEY:\s*([^\n]+)/);
       if (keyMatch) suiteDetectada = keyMatch[1].trim();
       const msgLimpa = texto.replace(/SUITE_KEY:[^\n]*\n?---?\n?/, '').trim();
-      document.getElementById('msg-box').textContent = msgLimpa;
+      const slug = SUITE_SLUGS[suiteDetectada.trim().toUpperCase()] || SUITE_SLUGS[suiteDetectada];
+      const linkGaleria = slug ? '\n\n📸 Veja as fotos do seu quarto:\n' + GALERIA_BASE + '?suite=' + slug : '';
+      document.getElementById('msg-box').textContent = msgLimpa + linkGaleria;
     }
     resultado.style.display = 'block';
-    mostrarFotosResultado();
     atualizarBotaoGaleria();
     resultado.scrollIntoView({ behavior:'smooth', block:'start' });
   } catch(err) {
@@ -573,20 +554,6 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
     btn.disabled = false; loading.style.display = 'none';
   }
 }
-
-function mostrarFotosResultado() {
-  const blocos = { suite: suiteDetectada, cafe:'cafe', social:'social', piscina:'piscina' };
-  let temAlguma = false;
-
-  // Suite
-  const fSuite = fotosMemoria[suiteDetectada] || [];
-  const bSuite = document.getElementById('bloco-suite');
-  const rSuite = document.getElementById('res-suite');
-  if (fSuite.length > 0) {
-    document.getElementById('label-suite').textContent = '🛏️ ' + (SUITE_LABELS[suiteDetectada] || 'Suíte');
-    rSuite.innerHTML = fSuite.map(url => `<img src="${url}" onclick="window.open(this.src)">`).join('');
-    bSuite.style.display = 'block'; temAlguma = true;
-  } else { bSuite.style.display = 'none'; }
 
   // Café
   const fCafe = fotosMemoria['cafe'] || [];
