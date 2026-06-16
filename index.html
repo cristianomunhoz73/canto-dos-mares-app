@@ -626,6 +626,21 @@ function resetar() {
   window.scrollTo({ top:0, behavior:'smooth' });
 }
 
+// ─── CARREGAR FOTOS SALVAS ────────────────────────────────
+function carregarFotosSalvas() {
+  try {
+    const saved = localStorage.getItem('cantomares_fotos');
+    if (saved) {
+      fotosMemoria = JSON.parse(saved);
+      console.log('Fotos carregadas:', Object.keys(fotosMemoria));
+    }
+  } catch(e) {
+    console.warn('Erro ao carregar fotos salvas:', e);
+  }
+  buildSuiteGrid();
+  ['cafe','social','piscina'].forEach(k => buildCatGrid(k));
+}
+
 // ─── INIT ──────────────────────────────────────────────────
 carregarFotosSalvas();
 </script>
