@@ -3,396 +3,465 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cotação — Pousada Canto dos Mares</title>
+<title>Galeria — Pousada Canto dos Mares</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --mar:#0D2B55;--mar2:#1A5276;--mar3:#2E86C1;
   --espuma:#D6EAF8;--gold:#C8962A;--gold2:#F0D9A8;
-  --noite:#09111F;--texto:#1C1C1C;--soft:#4A5568;
-  --borda:#E2E8F0;--fundo:#F8F9FB;
+  --noite:#09111F;--areia:#FAF3E0;--verde:#1E8449;
+  --texto:#1C1C1C;--soft:#4A5568;
+  --borda:rgba(255,255,255,0.1);
   --fd:'Playfair Display',Georgia,serif;
   --fb:'Inter',system-ui,sans-serif;
   --fm:'DM Mono',monospace;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--fb);background:linear-gradient(160deg,#071526 0%,#0D2B55 50%,#1A3A6C 100%);min-height:100vh;padding:0 0 60px}
-.app-header{text-align:center;padding:36px 20px 28px;position:relative}
-.app-header::after{content:'';display:block;width:60px;height:2px;background:var(--gold);margin:16px auto 0;opacity:.6}
-.app-logo-wave{font-size:32px;margin-bottom:10px;display:block}
-.app-titulo{font-family:var(--fd);font-size:clamp(20px,5vw,28px);color:white;font-weight:700;line-height:1.2;margin-bottom:4px}
-.app-titulo em{font-style:italic;color:var(--gold)}
-.app-sub{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4)}
-.container{max-width:680px;margin:0 auto;padding:0 16px}
-.card{background:white;border-radius:20px;padding:28px 24px;margin-bottom:16px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
-.modo-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px}
-.modo-btn{padding:11px 8px;border-radius:12px;border:2px solid var(--borda);background:var(--fundo);color:var(--soft);font-size:13px;font-weight:600;cursor:pointer;transition:.2s;text-align:center;font-family:var(--fb)}
-.modo-btn.active{background:var(--mar);border-color:var(--mar);color:white}
-.upload-area{border:2px dashed #AED6F1;border-radius:14px;padding:32px 20px;text-align:center;cursor:pointer;transition:.2s;background:#F4F9FD;position:relative}
-.upload-area:hover,.upload-area.drag{border-color:var(--mar3);background:#EAF4FB}
-.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.upload-icon{font-size:36px;margin-bottom:10px;display:block}
-.upload-area p{color:var(--soft);font-size:14px}
-.upload-area span{color:var(--mar3);font-weight:600}
-.paste-hint{margin-top:10px;background:#EAF4FB;border-radius:10px;padding:8px 14px;font-size:12px;color:var(--mar3);font-weight:600;text-align:center}
-#preview-img{max-width:100%;border-radius:10px;margin-top:14px;display:none;border:1px solid var(--borda)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group.full{grid-column:1/-1}
-label{font-family:var(--fm);font-size:10px;font-weight:500;color:var(--mar);text-transform:uppercase;letter-spacing:1px}
-input,select,textarea{border:1.5px solid var(--borda);border-radius:10px;padding:10px 12px;font-size:14px;color:var(--texto);outline:none;font-family:var(--fb);transition:border .2s;background:white}
-input:focus,select:focus,textarea:focus{border-color:var(--mar3)}
-.pet-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.toggle-btn{padding:8px 18px;border-radius:20px;border:2px solid var(--borda);background:var(--fundo);color:var(--soft);font-size:13px;font-weight:600;cursor:pointer;transition:.2s;font-family:var(--fb)}
-.toggle-btn.active{background:var(--mar);border-color:var(--mar);color:white}
-#pet-count-wrap{display:none}
-.btn-gerar{width:100%;padding:15px;margin-top:8px;background:linear-gradient(135deg,var(--gold),#D4A030);color:#1A1208;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;transition:.15s;font-family:var(--fb);display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-gerar:hover{opacity:.92;transform:translateY(-1px)}
-.btn-gerar:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.loading{text-align:center;padding:20px;color:var(--mar3);font-size:14px;display:none}
-.spinner{display:inline-block;width:22px;height:22px;border:3px solid var(--espuma);border-top-color:var(--mar3);border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle;margin-right:8px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.resultado{display:none}
-.resultado-header{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:2px solid var(--espuma)}
-.resultado-icon{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1E8449,#27AE60);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.resultado-title{font-family:var(--fd);font-size:17px;font-weight:700;color:var(--mar)}
-.resultado-sub{font-family:var(--fm);font-size:10px;color:var(--soft);letter-spacing:1px;text-transform:uppercase;margin-top:1px}
-.msg-box{background:linear-gradient(135deg,#F0FFF4,#E8F8EF);border:1.5px solid #A9DFBF;border-radius:14px;padding:18px 20px;font-size:14px;line-height:1.8;color:#1E3A2F;white-space:pre-wrap;word-break:break-word;font-family:var(--fb)}
-.btn-row{display:flex;gap:10px;margin-top:14px}
-.btn-copy{flex:1;padding:12px;border-radius:11px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;font-family:var(--fb);background:var(--mar);color:white;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-copy:hover{background:var(--mar2)}
-.btn-reset{flex:1;padding:12px;border-radius:11px;border:none;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;font-family:var(--fb);background:var(--fundo);color:var(--soft);display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-reset:hover{background:var(--espuma)}
-.btn-galeria{width:100%;padding:13px;border-radius:11px;border:none;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;font-family:var(--fb);margin-top:8px;background:linear-gradient(135deg,var(--gold),#D4A030);color:#1A1208;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-galeria:hover{opacity:.9;transform:translateY(-1px)}
-.info-strip{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
-@media(min-width:480px){.info-strip{grid-template-columns:repeat(4,1fr)}}
-.info-chip{background:rgba(13,43,85,.06);border:1px solid rgba(13,43,85,.1);border-radius:10px;padding:10px;text-align:center}
-.info-chip-icon{font-size:18px;margin-bottom:4px;display:block}
-.info-chip-label{font-family:var(--fm);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
-.info-chip-val{font-size:11px;font-weight:600;color:var(--mar);line-height:1.3}
-.wa-float{position:fixed;bottom:20px;right:20px;z-index:99;background:#25D366;color:white;border-radius:50px;padding:11px 18px;font-size:13px;font-weight:700;font-family:var(--fb);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,211,102,.45);display:flex;align-items:center;gap:7px;text-decoration:none;animation:pulse 3s infinite}
+body{font-family:var(--fb);background:var(--noite);color:white;min-height:100vh}
+
+.header{position:fixed;top:0;left:0;right:0;z-index:999;background:rgba(9,17,31,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--borda);height:64px;display:flex;align-items:center;padding:0 20px;gap:16px}
+.btn-voltar{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:white;font-family:var(--fb);font-size:13px;font-weight:600;padding:8px 16px;border-radius:8px;cursor:pointer;transition:.2s;white-space:nowrap;text-decoration:none}
+.btn-voltar:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3)}
+.header-logo{display:flex;align-items:center;gap:10px;margin-left:4px}
+.header-logo-text{font-family:var(--fd);font-size:15px;font-weight:700;color:white;line-height:1.2}
+.header-logo-sub{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);display:block}
+.header-suite-name{font-family:var(--fm);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:rgba(200,150,42,.12);border:1px solid rgba(200,150,42,.3);padding:6px 14px;border-radius:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.header-cats{display:flex;align-items:center;gap:6px;margin-left:auto;overflow-x:auto;scrollbar-width:none;flex-shrink:1;min-width:0}
+.header-cats::-webkit-scrollbar{display:none}
+.cat-btn{display:flex;align-items:center;gap:5px;background:rgba(200,150,42,.18);border:1.5px solid rgba(200,150,42,.55);color:var(--gold2);font-family:var(--fb);font-size:12px;font-weight:700;padding:7px 14px;border-radius:20px;cursor:pointer;transition:.2s;white-space:nowrap;text-decoration:none;flex-shrink:0;letter-spacing:0.3px}
+.cat-btn:hover{background:rgba(200,150,42,.35);border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+.cat-btn.active{background:var(--gold);border-color:var(--gold);color:#1A1208;font-weight:800}
+
+.rodape{background:rgba(0,0,0,.4);border-top:1px solid rgba(255,255,255,.08);margin-top:60px;padding:40px 20px 28px;text-align:center}
+.rodape-logo{font-family:var(--fd);font-size:20px;font-weight:700;color:white;margin-bottom:4px}
+.rodape-sub{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:24px}
+.rodape-links{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;margin-bottom:20px}
+.rodape-link{color:rgba(255,255,255,.6);font-size:13px;text-decoration:none;transition:.2s;display:flex;align-items:center;gap:6px}
+.rodape-link:hover{color:var(--gold)}
+.rodape-divider{color:rgba(255,255,255,.2);font-size:10px}
+.rodape-copy{font-family:var(--fm);font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.25);margin-top:16px}
+
+main{padding-top:64px;min-height:100vh}
+.tela-galeria{padding:32px 16px 60px}
+@media(min-width:640px){.tela-galeria{padding:40px 32px 80px}}
+.suite-header{max-width:1100px;margin:0 auto 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.suite-header-eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.suite-header-title{font-family:var(--fd);font-size:clamp(22px,4vw,34px);color:white;font-weight:700;line-height:1.15}
+.suite-header-count{font-family:var(--fm);font-size:11px;color:rgba(255,255,255,.4);margin-top:4px}
+
+.foto-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:480px){.foto-grid{grid-template-columns:repeat(3,1fr);gap:10px}}
+@media(min-width:768px){.foto-grid{grid-template-columns:repeat(4,1fr);gap:12px}}
+@media(min-width:1024px){.foto-grid{grid-template-columns:repeat(5,1fr);gap:14px}}
+.foto-thumb{aspect-ratio:4/3;border-radius:10px;overflow:hidden;cursor:pointer;position:relative;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);transition:.25s}
+.foto-thumb:hover{transform:scale(1.03);border-color:rgba(200,150,42,.5);box-shadow:0 8px 28px rgba(0,0,0,.5)}
+.foto-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:.3s}
+.foto-thumb:hover img{transform:scale(1.06)}
+.foto-thumb-overlay{position:absolute;inset:0;background:rgba(9,17,31,.0);display:flex;align-items:center;justify-content:center;transition:.2s}
+.foto-thumb:hover .foto-thumb-overlay{background:rgba(9,17,31,.35)}
+.foto-thumb-overlay svg{opacity:0;transform:scale(.7);transition:.2s;color:white}
+.foto-thumb:hover .foto-thumb-overlay svg{opacity:1;transform:scale(1)}
+
+.loading-state{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(min-width:768px){.loading-state{grid-template-columns:repeat(5,1fr)}}
+.skeleton{aspect-ratio:4/3;border-radius:10px;background:linear-gradient(90deg,rgba(255,255,255,.05) 0%,rgba(255,255,255,.1) 50%,rgba(255,255,255,.05) 100%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.empty-state{max-width:400px;margin:60px auto;text-align:center}
+.empty-icon{font-size:56px;margin-bottom:16px;display:block;opacity:.5}
+.empty-title{font-family:var(--fd);font-size:22px;color:white;margin-bottom:8px}
+.empty-text{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6}
+
+.lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.94);backdrop-filter:blur(8px);align-items:center;justify-content:center;flex-direction:column}
+.lightbox.open{display:flex}
+.lightbox-img-wrap{position:relative;max-width:min(95vw,1000px);max-height:80vh;display:flex;align-items:center;justify-content:center}
+.lightbox-img{max-width:100%;max-height:80vh;border-radius:8px;box-shadow:0 32px 80px rgba(0,0,0,.8);object-fit:contain}
+.lightbox-close{position:fixed;top:20px;right:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;font-size:20px}
+.lightbox-close:hover{background:rgba(255,255,255,.2)}
+.lightbox-nav{display:flex;align-items:center;gap:16px;margin-top:20px}
+.lightbox-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:white;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s}
+.lightbox-btn:hover{background:rgba(255,255,255,.2)}
+.lightbox-counter{font-family:var(--fm);font-size:12px;color:rgba(255,255,255,.5);letter-spacing:2px;min-width:60px;text-align:center}
+
+.info-footer{max-width:1100px;margin:40px auto 0;display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:640px){.info-footer{grid-template-columns:repeat(4,1fr)}}
+.info-footer-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.info-footer-card-icon{font-size:22px;flex-shrink:0}
+.info-footer-card-label{font-family:var(--fm);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);margin-bottom:2px}
+.info-footer-card-value{font-size:12px;color:rgba(255,255,255,.7);font-weight:500;line-height:1.4}
+
+.wa-float{position:fixed;bottom:24px;right:24px;z-index:99;background:#25D366;color:white;border-radius:50px;padding:12px 20px;font-size:13px;font-weight:700;font-family:var(--fb);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(37,211,102,.45);display:flex;align-items:center;gap:8px;text-decoration:none;animation:pulse 3s infinite}
 @keyframes pulse{0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.45)}50%{box-shadow:0 4px 32px rgba(37,211,102,.7)}}
-@media(max-width:500px){.form-grid{grid-template-columns:1fr}.btn-row{flex-direction:column}}
+
+/* ── SIDEBAR ── */
+.sidebar{position:fixed;top:64px;left:0;bottom:0;width:200px;background:rgba(9,17,31,.97);border-right:1px solid rgba(255,255,255,.08);padding:24px 12px;display:flex;flex-direction:column;gap:6px;z-index:100;overflow-y:auto}
+.sidebar-label{font-family:var(--fm);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:0 8px;margin-bottom:4px;margin-top:8px}
+.sidebar-btn{display:flex;align-items:center;gap:10px;background:transparent;border:1px solid transparent;color:rgba(255,255,255,.65);font-family:var(--fb);font-size:13px;font-weight:600;padding:10px 12px;border-radius:10px;cursor:pointer;transition:.2s;white-space:nowrap;text-decoration:none;width:100%}
+.sidebar-btn:hover{background:rgba(200,150,42,.12);border-color:rgba(200,150,42,.3);color:var(--gold)}
+.sidebar-btn.active{background:rgba(200,150,42,.18);border-color:var(--gold);color:var(--gold);font-weight:700}
+.sidebar-btn .s-icon{font-size:18px;flex-shrink:0}
+.sidebar-divider{height:1px;background:rgba(255,255,255,.07);margin:8px 0}
+
+/* ── BADGE "Seu Quarto" ── */
+.suite-origem-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(200,150,42,.15);
+  border:1px solid rgba(200,150,42,.4);
+  border-radius:6px;
+  padding:3px 8px;
+  font-family:var(--fm);font-size:8px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--gold);
+  margin-left:auto;flex-shrink:0;
+}
+
+@media(min-width:769px){main{padding-left:200px}.header-cats{display:none!important}}
+
+/* ── FAB MOBILE ── */
+.fab-menu{display:none;position:fixed;bottom:90px;left:20px;z-index:200;background:var(--gold);color:#1A1208;border:none;border-radius:50px;padding:12px 18px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(200,150,42,.5);align-items:center;gap:8px;font-family:var(--fb)}
+.fab-menu svg{flex-shrink:0}
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300}
+.drawer-overlay.open{display:block}
+.drawer{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--noite);border-right:1px solid rgba(255,255,255,.1);padding:20px 12px;z-index:301;transform:translateX(-100%);transition:transform .3s ease;overflow-y:auto}
+.drawer.open{transform:translateX(0)}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding:0 8px}
+.drawer-title{font-family:var(--fd);font-size:16px;color:white;font-weight:700}
+.drawer-close{background:rgba(255,255,255,.1);border:none;color:white;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px}
+@media(max-width:768px){.sidebar{display:none}.fab-menu{display:flex}}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
-<div class="app-header">
-  <span class="app-logo-wave">🌊</span>
-  <h1 class="app-titulo">Gerador de <em>Cotação</em></h1>
-  <p class="app-sub">Pousada Canto dos Mares · Guarujá</p>
-</div>
-<div class="container">
-  <div class="card">
-    <div class="modo-row">
-      <button class="modo-btn active" id="btn-modo-img" onclick="setModo('imagem')">📋 Colar Print</button>
-      <button class="modo-btn" id="btn-modo-manual" onclick="setModo('manual')">✏️ Preencher Manual</button>
-    </div>
-    <div id="modo-imagem">
-      <div class="upload-area" id="upload-area">
-        <input type="file" accept="image/*" id="file-input" onchange="onFileSelect(event)">
-        <span class="upload-icon">📋</span>
-        <p>Arraste o print ou <span>clique para selecionar</span></p>
-      </div>
-      <div class="paste-hint">💡 <strong>Ctrl+V</strong> (ou Cmd+V) para colar o print direto</div>
-      <img id="preview-img" alt="Preview">
-    </div>
-    <div id="modo-manual" style="display:none">
-      <div class="form-grid">
-        <div class="form-group"><label>Check-in</label><input type="text" id="m-checkin" placeholder="Ex: 18/06/2026"></div>
-        <div class="form-group"><label>Check-out</label><input type="text" id="m-checkout" placeholder="Ex: 20/06/2026"></div>
-        <div class="form-group"><label>Adultos</label><input type="number" id="m-adultos" placeholder="2" min="1"></div>
-        <div class="form-group"><label>Crianças</label><input type="number" id="m-criancas" placeholder="0" min="0"></div>
-        <div class="form-group full">
-          <label>Tipo de Suíte</label>
-          <select id="m-suite" onchange="onSuiteChange()">
-            <option value="">Selecione...</option>
-            <option value="HOME SUPERIOR CASAL">Home Superior Casal</option>
-            <option value="HOME TERREO FAMILIA">Home Térreo Família</option>
-            <option value="HOME TERREO SINGLE">Home Térreo Single</option>
-            <option value="HOME TERREO QUADRUPLO">Home Térreo Quádruplo</option>
-            <option value="HOME SUPERIOR TRIPLO">Home Superior Triplo</option>
-            <option value="HOME SUPERIOR QUADRUPLO">Home Superior Quádruplo</option>
-            <option value="EXTERNA TERREO CASAL">Externa Térreo Casal</option>
-            <option value="EXTERNA TERREO QUADRUPLO">Externa Térreo Quádruplo</option>
-            <option value="EXTERNA TERREO FAMILIA">Externa Térreo Família</option>
-            <option value="EXTERNA SUPERIOR QUADRUPLO">Externa Superior Quádruplo</option>
-          </select>
-        </div>
-        <div class="form-group"><label>Diária Média</label><input type="text" id="m-diaria" placeholder="R$ 239,00"></div>
-        <div class="form-group"><label>Valor Total</label><input type="text" id="m-total" placeholder="R$ 478,00"></div>
-        <div class="form-group full">
-          <label>Pet?</label>
-          <div class="pet-row">
-            <button class="toggle-btn active" id="pet-nao" onclick="setPet(false)">🚫 Não</button>
-            <button class="toggle-btn" id="pet-sim" onclick="setPet(true)">🐾 Sim</button>
-            <span id="pet-count-wrap"><input type="number" id="m-pets" placeholder="Qtd" min="1" max="5" style="width:80px"></span>
-          </div>
-        </div>
-        <div class="form-group full">
-          <label>Observação (opcional)</label>
-          <textarea id="m-obs" rows="2" placeholder="Ex: early check-in, aniversário..."></textarea>
-        </div>
-      </div>
-    </div>
-    <button class="btn-gerar" id="btn-gerar" onclick="gerar()">✨ Gerar Mensagem para WhatsApp</button>
-    <div class="loading" id="loading"><span class="spinner"></span> Processando sua cotação...</div>
-    <div class="info-strip">
-      <div class="info-chip"><span class="info-chip-icon">🕐</span><div class="info-chip-label">Check-in/out</div><div class="info-chip-val">14h · 12h</div></div>
-      <div class="info-chip"><span class="info-chip-icon">🅿️</span><div class="info-chip-label">Estacionamento</div><div class="info-chip-val">Gratuito 24h</div></div>
-      <div class="info-chip"><span class="info-chip-icon">🛎️</span><div class="info-chip-label">Recepção</div><div class="info-chip-val">24 horas</div></div>
-      <div class="info-chip"><span class="info-chip-icon">☕</span><div class="info-chip-label">Café da Manhã</div><div class="info-chip-val">8h às 10h</div></div>
-    </div>
-  </div>
 
-  <div class="card resultado" id="resultado">
-    <div class="resultado-header">
-      <div class="resultado-icon">✅</div>
-      <div>
-        <div class="resultado-title">Mensagem Pronta</div>
-        <div class="resultado-sub">Copie e envie pelo WhatsApp</div>
+<header class="header">
+  <a class="btn-voltar" id="btnVoltar" href="index.html">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Voltar
+  </a>
+  <div class="header-logo" style="flex-shrink:0">
+    <div>
+      <span class="header-logo-text">Canto dos Mares</span>
+      <span class="header-logo-sub">Pousada • Guarujá</span>
+    </div>
+  </div>
+  <div class="header-cats" id="headerCats">
+    <a class="cat-btn" href="#" data-slug="areas-comuns">🏊 Áreas</a>
+    <a class="cat-btn" href="#" data-slug="belnedito-gastrobar">🍽️ GastroBar</a>
+    <a class="cat-btn" href="#" data-slug="pet-friendly">🐾 Pet</a>
+    <a class="cat-btn" href="#" data-slug="praia-entorno">🏖️ Praia</a>
+  </div>
+  <span class="header-suite-name" id="headerSuiteName" style="flex-shrink:0"></span>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <!-- Botão "Seu Quarto" — sempre aponta para a suíte do orçamento -->
+  <div class="sidebar-label">Fotos do Quarto</div>
+  <a class="sidebar-btn" id="sidebarSuiteBtn" href="#">
+    <span class="s-icon">🛏️</span>
+    <span id="sidebarSuiteName">Seu Quarto</span>
+    <span class="suite-origem-badge" id="sidebarOrigemBadge" style="display:none">origem</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-label">Conheça a Pousada</div>
+  <a class="sidebar-btn" href="#" data-slug="areas-comuns"><span class="s-icon">🏊</span> Áreas Comuns</a>
+  <a class="sidebar-btn" href="#" data-slug="belnedito-gastrobar"><span class="s-icon">🍽️</span> GastroBar</a>
+  <a class="sidebar-btn" href="#" data-slug="pet-friendly"><span class="s-icon">🐾</span> Pet Friendly</a>
+  <a class="sidebar-btn" href="#" data-slug="praia-entorno"><span class="s-icon">🏖️</span> Praia & Entorno</a>
+</aside>
+
+<button class="fab-menu" id="fabMenu" onclick="abrirDrawer()">
+  <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+  Ver mais fotos
+</button>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="fecharDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">📸 Galerias</span>
+    <button class="drawer-close" onclick="fecharDrawer()">✕</button>
+  </div>
+  <div class="sidebar-label">Fotos do Quarto</div>
+  <a class="sidebar-btn" id="drawerSuiteBtn" href="#">
+    <span class="s-icon">🛏️</span>
+    <span id="drawerSuiteName">Seu Quarto</span>
+  </a>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-label">Conheça a Pousada</div>
+  <a class="sidebar-btn" href="#" data-slug="areas-comuns"><span class="s-icon">🏊</span> Áreas Comuns</a>
+  <a class="sidebar-btn" href="#" data-slug="belnedito-gastrobar"><span class="s-icon">🍽️</span> GastroBar</a>
+  <a class="sidebar-btn" href="#" data-slug="pet-friendly"><span class="s-icon">🐾</span> Pet Friendly</a>
+  <a class="sidebar-btn" href="#" data-slug="praia-entorno"><span class="s-icon">🏖️</span> Praia & Entorno</a>
+</div>
+
+<main>
+  <div class="tela-galeria" id="telaGaleria">
+    <div class="suite-header">
+      <div class="suite-header-left">
+        <div class="suite-header-eyebrow">📸 Galeria de Fotos</div>
+        <h1 class="suite-header-title" id="suiteTitulo">Carregando...</h1>
+        <div class="suite-header-count" id="suiteCount"></div>
       </div>
     </div>
-    <div class="msg-box" id="msg-box"></div>
-    <div class="btn-row">
-      <button class="btn-copy" id="btn-copy" onclick="copiar()">📋 Copiar Mensagem</button>
-      <button class="btn-reset" onclick="resetar()">↩️ Nova Cotação</button>
+    <div class="loading-state" id="loadingState">
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>
+      <div class="skeleton"></div>
     </div>
-    <a class="btn-galeria" id="btn-galeria" href="#" target="_blank" style="display:none;">📸 Ver Fotos do Quarto</a>
+    <div class="foto-grid hidden" id="fotoGrid"></div>
+    <div class="empty-state hidden" id="emptyState">
+      <span class="empty-icon">🖼️</span>
+      <div class="empty-title">Fotos em breve</div>
+      <div class="empty-text">As fotos desta categoria ainda estão sendo preparadas. Entre em contato pelo WhatsApp para mais informações.</div>
+    </div>
+    <div class="info-footer">
+      <div class="info-footer-card"><span class="info-footer-card-icon">🕐</span><div><div class="info-footer-card-label">Check-in / Check-out</div><div class="info-footer-card-value">Entrada 14h · Saída 12h</div></div></div>
+      <div class="info-footer-card"><span class="info-footer-card-icon">🅿️</span><div><div class="info-footer-card-label">Estacionamento</div><div class="info-footer-card-value">Gratuito · 24 horas</div></div></div>
+      <div class="info-footer-card"><span class="info-footer-card-icon">🛎️</span><div><div class="info-footer-card-label">Recepção</div><div class="info-footer-card-value">Disponível 24 horas</div></div></div>
+      <div class="info-footer-card"><span class="info-footer-card-icon">☕</span><div><div class="info-footer-card-label">Café da Manhã</div><div class="info-footer-card-value">Incluso · 8h às 10h</div></div></div>
+    </div>
+  </div>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose" title="Fechar">✕</button>
+  <div class="lightbox-img-wrap">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="Foto da suíte">
+  </div>
+  <div class="lightbox-nav">
+    <button class="lightbox-btn" id="lightboxPrev"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <span class="lightbox-counter" id="lightboxCounter">1 / 1</span>
+    <button class="lightbox-btn" id="lightboxNext"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
   </div>
 </div>
+
+<footer class="rodape">
+  <div class="rodape-logo">Pousada Canto dos Mares</div>
+  <div class="rodape-sub">Guarujá · São Paulo · Brasil</div>
+  <div class="rodape-links">
+    <a class="rodape-link" href="https://wa.me/5513997360329" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      (13) 99736-0329
+    </a>
+    <span class="rodape-divider">·</span>
+    <a class="rodape-link" href="https://instagram.com/pousadacantodosmares" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @pousadacantodosmares
+    </a>
+    <span class="rodape-divider">·</span>
+    <a class="rodape-link" href="https://instagram.com/belnedito" target="_blank" rel="noopener">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @belnedito
+    </a>
+  </div>
+  <div style="font-family:var(--fm);font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;">🍽️ Belnedito GastroBar · 18h às 23h</div>
+  <div class="rodape-copy">© 2026 Pousada Canto dos Mares · Todos os direitos reservados</div>
+</footer>
 
 <a class="wa-float" href="https://wa.me/5513997360329" target="_blank" rel="noopener">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  Fale conosco
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Dúvidas? Fale conosco
 </a>
 
 <script>
-let modoAtual = 'imagem';
-let temPet = false;
-let imgBase64 = null;
-let imgMediaType = 'image/png';
-let suiteDetectada = '';
+const REPO_BASE = 'https://raw.githubusercontent.com/cristianomunhoz73/canto-dos-mares-app/main/fotos/';
+const GITHUB_API = 'https://api.github.com/repos/cristianomunhoz73/canto-dos-mares-app/contents/fotos/';
 
-const SUITE_LABELS = {
-  'HOME SUPERIOR CASAL':'Home Superior Casal','HOME TERREO FAMILIA':'Home Térreo Família',
-  'HOME TERREO SINGLE':'Home Térreo Single','HOME TERREO QUADRUPLO':'Home Térreo Quádruplo',
-  'HOME SUPERIOR TRIPLO':'Home Superior Triplo','HOME SUPERIOR QUADRUPLO':'Home Superior Quádruplo',
-  'EXTERNA TERREO CASAL':'Externa Térreo Casal','EXTERNA TERREO QUADRUPLO':'Externa Térreo Quádruplo',
-  'EXTERNA TERREO FAMILIA':'Externa Térreo Família','EXTERNA SUPERIOR QUADRUPLO':'Externa Superior Quádruplo'
+const SUITE_NOMES = {
+  'externa-superior-quadruplo':'Suíte Externa Superior Quádruplo',
+  'externa-terreo-casal':'Suíte Externa Térreo Casal',
+  'externa-terreo-familia':'Suíte Externa Térreo Família',
+  'externa-terreo-quadruplo':'Suíte Externa Térreo Quádruplo',
+  'home-superior-casal':'Suíte Home Superior Casal',
+  'home-superior-quadruplo':'Suíte Home Superior Quádruplo',
+  'home-superior-triplo':'Suíte Home Superior Triplo',
+  'home-terreo-familia':'Suíte Home Térreo Família',
+  'home-terreo-quadruplo':'Suíte Home Térreo Quádruplo',
+  'areas-comuns':'Áreas Comuns',
+  'belnedito-gastrobar':'Belnedito GastroBar',
+  'pet-friendly':'Pet Friendly',
+  'praia-entorno':'Praia & Entorno',
 };
 
-const SUITE_SLUGS = {
-  'HOME SUPERIOR CASAL':'home-superior-casal','HOME TERREO FAMILIA':'home-terreo-familia',
-  'HOME TERREO SINGLE':'home-terreo-familia','HOME TERREO QUADRUPLO':'home-terreo-quadruplo',
-  'HOME SUPERIOR TRIPLO':'home-superior-triplo','HOME SUPERIOR QUADRUPLO':'home-superior-quadruplo',
-  'EXTERNA TERREO CASAL':'externa-terreo-casal','EXTERNA TERREO QUADRUPLO':'externa-terreo-quadruplo',
-  'EXTERNA TERREO FAMILIA':'externa-terreo-familia','EXTERNA SUPERIOR QUADRUPLO':'externa-superior-quadruplo'
+const NOMES_CURTOS = {
+  'externa-superior-quadruplo':'Ext. Sup. Quádruplo',
+  'externa-terreo-casal':'Ext. Térreo Casal',
+  'externa-terreo-familia':'Ext. Térreo Família',
+  'externa-terreo-quadruplo':'Ext. Térreo Quádruplo',
+  'home-superior-casal':'Home Sup. Casal',
+  'home-superior-quadruplo':'Home Sup. Quádruplo',
+  'home-superior-triplo':'Home Sup. Triplo',
+  'home-terreo-familia':'Home Tér. Família',
+  'home-terreo-quadruplo':'Home Tér. Quádruplo',
+  'areas-comuns':'Áreas Comuns',
+  'belnedito-gastrobar':'GastroBar',
+  'pet-friendly':'Pet Friendly',
+  'praia-entorno':'Praia & Entorno',
 };
 
-const GALERIA_BASE = 'https://cristianomunhoz73.github.io/canto-dos-mares-app/galeria.html';
+let fotosAtivas = [];
+let fotoAtualIdx = 0;
 
-function setModo(modo){
-  modoAtual=modo;
-  document.getElementById('modo-imagem').style.display=modo==='imagem'?'block':'none';
-  document.getElementById('modo-manual').style.display=modo==='manual'?'block':'none';
-  document.getElementById('btn-modo-img').classList.toggle('active',modo==='imagem');
-  document.getElementById('btn-modo-manual').classList.toggle('active',modo==='manual');
+// ✅ FUNÇÃO CENTRAL: constrói URL preservando suite_origem
+function buildUrl(slug, suiteOrigem) {
+  let url = 'galeria.html?suite=' + slug;
+  if (suiteOrigem && suiteOrigem !== slug) {
+    url += '&suite_origem=' + encodeURIComponent(suiteOrigem);
+  } else if (suiteOrigem) {
+    // mesmo que seja o próprio quarto, preserva para consistência
+    url += '&suite_origem=' + encodeURIComponent(suiteOrigem);
+  }
+  return url;
 }
-function setPet(sim){
-  temPet=sim;
-  document.getElementById('pet-sim').classList.toggle('active',sim);
-  document.getElementById('pet-nao').classList.toggle('active',!sim);
-  document.getElementById('pet-count-wrap').style.display=sim?'inline':'none';
-}
-function onSuiteChange(){suiteDetectada=document.getElementById('m-suite').value}
 
-function carregarImgParaPNG(dataUrl,cb){
-  const img=new Image();
-  img.onload=()=>{
-    const canvas=document.createElement('canvas');
-    canvas.width=img.width;canvas.height=img.height;
-    canvas.getContext('2d').drawImage(img,0,0);
-    const png=canvas.toDataURL('image/png');
-    cb(png.split(',')[1],'image/png',png);
-  };
-  img.src=dataUrl;
+document.addEventListener('DOMContentLoaded', () => {
+  const params      = new URLSearchParams(window.location.search);
+  const suite       = params.get('suite');
+  // ✅ suite_origem: suíte do orçamento original. Se não existir, usa a suite atual.
+  const suiteOrigem = params.get('suite_origem') || suite;
+
+  if (!suite || !SUITE_NOMES[suite]) {
+    mostrarErro('Categoria não encontrada.');
+    return;
+  }
+
+  const nomeExibicao = SUITE_NOMES[suite];
+  document.title = nomeExibicao + ' — Pousada Canto dos Mares';
+  document.getElementById('suiteTitulo').textContent = nomeExibicao;
+  document.getElementById('headerSuiteName').textContent = nomeExibicao;
+
+  // ── SIDEBAR: botão "Seu Quarto" ──────────────────────────────
+  const nomeOrigem = NOMES_CURTOS[suiteOrigem] || SUITE_NOMES[suiteOrigem] || 'Seu Quarto';
+  
+  // Texto do botão
+  document.getElementById('sidebarSuiteName').textContent = nomeOrigem;
+  document.getElementById('drawerSuiteName').textContent  = nomeOrigem;
+
+  // ✅ Botão sempre aponta para a suíte do orçamento (suite_origem)
+  const urlSuiteOrigem = buildUrl(suiteOrigem, suiteOrigem);
+  document.getElementById('sidebarSuiteBtn').href = urlSuiteOrigem;
+  document.getElementById('drawerSuiteBtn').href  = urlSuiteOrigem;
+
+  // Marcar ativo se estamos NA suíte origem
+  if (suite === suiteOrigem) {
+    document.getElementById('sidebarSuiteBtn').classList.add('active');
+    document.getElementById('drawerSuiteBtn').classList.add('active');
+  }
+
+  // ── LINKS DE NAVEGAÇÃO (sidebar + header + drawer) ──────────
+  // Todos preservam suite_origem ao navegar para outras categorias
+  document.querySelectorAll('[data-slug]').forEach(btn => {
+    const slug = btn.dataset.slug;
+    const url  = buildUrl(slug, suiteOrigem);
+    btn.href   = url;
+    // Marcar ativo se é a categoria atual (e não é a suíte origem sendo exibida como "Seu Quarto")
+    if (slug === suite) btn.classList.add('active');
+  });
+
+  // ── BOTÃO VOLTAR ─────────────────────────────────────────────
+  document.getElementById('btnVoltar').href = 'index.html';
+
+  carregarFotos(suite);
+  initLightbox();
+});
+
+async function carregarFotos(suite) {
+  try {
+    const res = await fetch(GITHUB_API + suite);
+    if (!res.ok) throw new Error('Pasta não encontrada');
+    const arquivos = await res.json();
+    const fotos = arquivos
+      .filter(f => /\.(jpg|jpeg|png|webp)$/i.test(f.name))
+      .map(f => ({
+        nome: f.name,
+        url:  REPO_BASE + suite + '/' + encodeURIComponent(f.name)
+      }));
+    ocultarLoading();
+    if (fotos.length === 0) {
+      document.getElementById('emptyState').classList.remove('hidden');
+      return;
+    }
+    fotosAtivas = fotos;
+    document.getElementById('suiteCount').textContent = fotos.length + ' foto' + (fotos.length > 1 ? 's' : '');
+    renderizarGrade(fotos);
+  } catch(e) {
+    ocultarLoading();
+    document.getElementById('emptyState').classList.remove('hidden');
+  }
 }
-function setImagem(dataUrl){
-  carregarImgParaPNG(dataUrl,(b64,mt,pngUrl)=>{
-    imgBase64=b64;imgMediaType=mt;
-    const p=document.getElementById('preview-img');
-    p.src=pngUrl;p.style.display='block';
+
+function renderizarGrade(fotos) {
+  const grid = document.getElementById('fotoGrid');
+  grid.classList.remove('hidden');
+  grid.innerHTML = '';
+  fotos.forEach((foto, idx) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'foto-thumb';
+    thumb.innerHTML = `
+      <img src="${foto.url}" alt="${foto.nome}" loading="lazy">
+      <div class="foto-thumb-overlay">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/>
+        </svg>
+      </div>`;
+    thumb.addEventListener('click', () => abrirLightbox(idx));
+    grid.appendChild(thumb);
   });
 }
-function onFileSelect(e){
-  const file=e.target.files[0];if(!file)return;
-  const r=new FileReader();r.onload=ev=>setImagem(ev.target.result);r.readAsDataURL(file);
+
+function initLightbox() {
+  document.getElementById('lightboxClose').addEventListener('click', fecharLightbox);
+  document.getElementById('lightboxPrev').addEventListener('click', () => navegarLightbox(-1));
+  document.getElementById('lightboxNext').addEventListener('click', () => navegarLightbox(+1));
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === document.getElementById('lightbox')) fecharLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    const lb = document.getElementById('lightbox');
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') fecharLightbox();
+    if (e.key === 'ArrowLeft') navegarLightbox(-1);
+    if (e.key === 'ArrowRight') navegarLightbox(+1);
+  });
 }
-const uploadArea=document.getElementById('upload-area');
-uploadArea.addEventListener('dragover',e=>{e.preventDefault();uploadArea.classList.add('drag')});
-uploadArea.addEventListener('dragleave',()=>uploadArea.classList.remove('drag'));
-uploadArea.addEventListener('drop',e=>{
-  e.preventDefault();uploadArea.classList.remove('drag');
-  const file=e.dataTransfer.files[0];if(!file)return;
-  const r=new FileReader();r.onload=ev=>setImagem(ev.target.result);r.readAsDataURL(file);
-});
-document.addEventListener('paste',e=>{
-  if(modoAtual!=='imagem')return;
-  const items=e.clipboardData?.items;if(!items)return;
-  for(const item of items){
-    if(item.type.startsWith('image/')){
-      const file=item.getAsFile();if(!file)continue;
-      const r=new FileReader();r.onload=ev=>setImagem(ev.target.result);r.readAsDataURL(file);
-      e.preventDefault();break;
-    }
-  }
-});
-
-async function gerar(){
-  const btn=document.getElementById('btn-gerar');
-  const loading=document.getElementById('loading');
-  const resultado=document.getElementById('resultado');
-  let messages=[];
-  suiteDetectada='';
-
-  if(modoAtual==='imagem'){
-    if(!imgBase64){alert('Selecione ou cole o print da cotação.');return}
-    const prompt=`Você é um assistente da Pousada Canto dos Mares no Guarujá/SP.
-Analise esta imagem de cotação e extraia todas as informações.
-
-ABREVIAÇÕES DO SISTEMA:
-- ADLT = Adultos, CHD = Crianças
-- DIÁRIA MÉDIA = valor por noite, VALOR TOTAL = total da estadia
-- O nome da suíte aparece em destaque em maiúsculas
-
-SUÍTES POSSÍVEIS:
-HOME SUPERIOR CASAL, HOME TERREO FAMILIA, HOME TERREO SINGLE, HOME TERREO QUADRUPLO,
-HOME SUPERIOR TRIPLO, HOME SUPERIOR QUADRUPLO, EXTERNA TERREO CASAL,
-EXTERNA TERREO QUADRUPLO, EXTERNA TERREO FAMILIA, EXTERNA SUPERIOR QUADRUPLO
-
-IMPORTANTE: A primeira linha DEVE ser SUITE_KEY. Sem texto antes.
-
-SUITE_KEY: [CHAVE EXATA EM MAIÚSCULAS]
----
-Aqui está sua cotação:
-
-📅 Período: [DATA CHECK-IN] a [DATA CHECK-OUT] ([Nº NOITES] noite(s))
-👥 Hóspedes: [Nº ADULTOS] adulto(s)[, Nº CRIANÇAS criança(s) — só se CHD > 0]
-🛏️ Suíte: [NOME DA SUÍTE em português normal]
-💰 Diária média: R$ [VALOR DIÁRIA]
-💰 Valor total: R$ [VALOR TOTAL]
-☕ Café da manhã incluso
-🐾 Pet: NÃO
-
-Reserva garantida apenas após confirmação do pagamento!`;
-    messages=[{role:'user',content:[
-      {type:'image',source:{type:'base64',media_type:imgMediaType,data:imgBase64}},
-      {type:'text',text:prompt}
-    ]}];
-  } else {
-    const checkin=document.getElementById('m-checkin').value;
-    const checkout=document.getElementById('m-checkout').value;
-    const adultos=document.getElementById('m-adultos').value;
-    const criancas=document.getElementById('m-criancas').value;
-    const suite=document.getElementById('m-suite').value;
-    const diaria=document.getElementById('m-diaria').value;
-    const total=document.getElementById('m-total').value;
-    const obs=document.getElementById('m-obs').value;
-    const pets=temPet?(document.getElementById('m-pets').value||'1'):'0';
-    if(!checkin||!checkout||!adultos||!suite||!total){alert('Preencha ao menos: datas, adultos, suíte e valor total.');return}
-    suiteDetectada=suite;
-    const dados=`Check-in: ${checkin}\nCheck-out: ${checkout}\nAdultos: ${adultos}\nCrianças: ${criancas||'0'}\nSuíte: ${SUITE_LABELS[suite]||suite}\nDiária média: ${diaria||'não informada'}\nValor total: ${total}\nPet: ${temPet?`Sim — ${pets} pet(s)`:'Não'}\nObservação: ${obs||'nenhuma'}`;
-    const prompt=`Você é um assistente da Pousada Canto dos Mares no Guarujá/SP.
-Gere UMA mensagem formatada para WhatsApp com os dados abaixo.
-
-SUITE_KEY: ${suite}
----
-Aqui está sua cotação:
-
-📅 Período: [DATA CHECK-IN] a [DATA CHECK-OUT] ([Nº NOITES] noite(s))
-👥 Hóspedes: [Nº ADULTOS] adulto(s)[, Nº CRIANÇAS criança(s) — só se > 0]
-🛏️ Suíte: [NOME DA SUÍTE]
-💰 Diária média: [VALOR DIÁRIA]
-💰 Valor total: [VALOR TOTAL]
-☕ Café da manhã incluso
-🐾 Pet: ${temPet?`SIM — R$35,00/diária por pet`:'NÃO'}
-${obs?`ℹ️ Obs: ${obs}`:''}
-
-Reserva garantida apenas após confirmação do pagamento!
-
-Dados: ${dados}
-Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
-    messages=[{role:'user',content:prompt}];
-  }
-
-  btn.disabled=true;loading.style.display='block';resultado.style.display='none';
-
-  try{
-    const response=await fetch('https://quiet-lake-1bd3.cristianomunhoz73.workers.dev/',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages})
-    });
-    const data=await response.json();
-    if(data.error){
-      document.getElementById('msg-box').textContent='Erro da API: '+data.error.message;
-    } else {
-      const texto=data.content?.[0]?.text||'';
-      const keyMatch=texto.match(/SUITE_KEY:\s*([^\n\r]+)/);
-      if(keyMatch)suiteDetectada=keyMatch[1].trim().toUpperCase().replace(/[^A-Z\s]/g,'').trim();
-      const msgLimpa=texto.replace(/SUITE_KEY:[^\n]*[\n\r]*-{0,3}[\n\r]*/,'').trim();
-      const slug=SUITE_SLUGS[suiteDetectada]||SUITE_SLUGS[suiteDetectada.trim()];
-      // ✅ LINK ATUALIZADO: passa suite_origem para preservar o quarto na navegação
-      const linkGaleria=slug?'\n\n📸 Veja as fotos do seu quarto:\n'+GALERIA_BASE+'?suite='+slug+'&suite_origem='+slug:'';
-      document.getElementById('msg-box').textContent=msgLimpa+linkGaleria;
-    }
-    resultado.style.display='block';
-    atualizarBotaoGaleria();
-    resultado.scrollIntoView({behavior:'smooth',block:'start'});
-  } catch(err){
-    alert('Erro ao conectar com a API: '+err.message);
-  } finally{
-    btn.disabled=false;loading.style.display='none';
-  }
+function abrirLightbox(idx) {
+  fotoAtualIdx = idx; atualizarLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
-
-function atualizarBotaoGaleria(){
-  const btn=document.getElementById('btn-galeria');
-  const chave=suiteDetectada.trim().toUpperCase();
-  const slug=SUITE_SLUGS[chave]||SUITE_SLUGS[suiteDetectada];
-  if(slug){
-    // ✅ BOTÃO GALERIA: também passa suite_origem
-    btn.href=GALERIA_BASE+'?suite='+slug+'&suite_origem='+slug;
-    btn.style.display='flex';
-  } else {
-    btn.style.display='none';
-  }
+function fecharLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
 }
-
-function copiar(){
-  const texto=document.getElementById('msg-box').textContent;
-  const btn=document.getElementById('btn-copy');
-  const fallback=()=>{
-    const ta=document.createElement('textarea');
-    ta.value=texto;ta.style.position='fixed';ta.style.left='-9999px';
-    document.body.appendChild(ta);ta.focus();ta.select();
-    try{document.execCommand('copy');confirmar(btn)}catch(e){alert('Selecione o texto e pressione Ctrl+C.')}
-    document.body.removeChild(ta);
-  };
-  if(navigator.clipboard?.writeText){navigator.clipboard.writeText(texto).then(()=>confirmar(btn)).catch(fallback)}
-  else{fallback()}
+function navegarLightbox(delta) {
+  fotoAtualIdx = (fotoAtualIdx + delta + fotosAtivas.length) % fotosAtivas.length;
+  atualizarLightbox();
 }
-function confirmar(btn){
-  const orig=btn.innerHTML;btn.innerHTML='✅ Copiado!';
-  setTimeout(()=>btn.innerHTML=orig,2500);
+function atualizarLightbox() {
+  const foto = fotosAtivas[fotoAtualIdx];
+  document.getElementById('lightboxImg').src = foto.url;
+  document.getElementById('lightboxImg').alt = foto.nome;
+  document.getElementById('lightboxCounter').textContent = (fotoAtualIdx + 1) + ' / ' + fotosAtivas.length;
 }
-function resetar(){
-  document.getElementById('resultado').style.display='none';
-  document.getElementById('preview-img').style.display='none';
-  document.getElementById('file-input').value='';
-  imgBase64=null;suiteDetectada='';
-  window.scrollTo({top:0,behavior:'smooth'});
+function abrirDrawer() {
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function fecharDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function ocultarLoading() {
+  document.getElementById('loadingState').classList.add('hidden');
+}
+function mostrarErro(msg) {
+  ocultarLoading();
+  const empty = document.getElementById('emptyState');
+  empty.querySelector('.empty-title').textContent = 'Categoria inválida';
+  empty.querySelector('.empty-text').textContent = msg;
+  empty.classList.remove('hidden');
 }
 </script>
 </body>
