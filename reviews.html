@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Responder Reviews — Grupo Point Beach</title>
+<style>
+  :root {
+    --navy: #09111F;
+    --gold: #C8962A;
+    --blue: #0D2B55;
+    --light: #F4F6F9;
+    --white: #FFFFFF;
+    --border: #DDE3EC;
+    --text: #1A2B45;
+    --muted: #6B7A99;
+    --success: #0A7C59;
+    --error: #C0392B;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(9,17,31,0.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--light);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: white;
+    padding: 20px 20px 0;
+    text-align: center;
+  }
+
+  .header-icon { font-size: 2rem; margin-bottom: 6px; }
+
+  header h1 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  header p {
+    font-size: 0.82rem;
+    opacity: 0.75;
+    margin-top: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    margin-top: 4px;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 12px 8px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    text-decoration: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .tab.active {
+    color: white;
+    border-bottom-color: var(--gold);
+  }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* ── SELETOR DE POUSADA ── */
+  .pousada-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .pousada-btn {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 8px;
+    background: var(--white);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .pousada-btn:hover {
+    border-color: var(--blue);
+    background: #F0F4FA;
+  }
+
+  .pousada-btn.selected {
+    border-color: var(--gold);
+    background: #FDF8EE;
+  }
+
+  .pousada-btn .pb-icon { font-size: 1.4rem; display: block; margin-bottom: 4px; }
+
+  .pousada-btn .pb-name {
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .pousada-btn .pb-sub {
+    font-size: 0.66rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .pousada-btn .pb-check {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 18px;
+    height: 18px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    color: white;
+    font-weight: 800;
+  }
+
+  .pousada-btn.selected .pb-check { display: flex; }
+
+  /* Pousada Belnedito — linha separada */
+  .pousada-belnedito {
+    grid-column: 1 / -1;
+  }
+
+  /* ── PLATAFORMA ── */
+  .platform-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .platform-btn {
+    flex: 1;
+    min-width: 80px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 6px;
+    background: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .platform-btn:hover { border-color: var(--blue); color: var(--blue); }
+
+  .platform-btn.selected {
+    border-color: var(--blue);
+    background: #EEF3FB;
+    color: var(--blue);
+  }
+
+  .platform-btn .pf-icon { font-size: 1.2rem; display: block; margin-bottom: 2px; }
+
+  /* ── STARS ── */
+  .stars-row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .star-btn {
+    font-size: 1.6rem;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.15s;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 2px;
+  }
+
+  .star-btn.active { opacity: 1; }
+  .star-btn:hover { transform: scale(1.15); }
+
+  /* ── TEXTAREA ── */
+  .field-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  textarea, select {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    font-family: inherit;
+    color: var(--text);
+    background: white;
+    resize: vertical;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  textarea:focus, select:focus { border-color: var(--blue); }
+
+  /* ── TOM ── */
+  .tom-row {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tom-btn {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 4px;
+    background: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .tom-btn .tm-icon { display: block; font-size: 1.1rem; margin-bottom: 2px; }
+  .tom-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .tom-btn.selected { border-color: var(--gold); background: #FDF8EE; color: var(--text); }
+
+  /* ── BTN GERAR ── */
+  .btn-gerar {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 4px;
+  }
+
+  .btn-gerar:hover { opacity: 0.92; transform: translateY(-1px); }
+  .btn-gerar:active { transform: translateY(0); }
+  .btn-gerar:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── LOADING ── */
+  .loading {
+    text-align: center;
+    padding: 32px 20px;
+    display: none;
+  }
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading p { color: var(--muted); font-size: 0.85rem; }
+
+  /* ── RESPOSTAS ── */
+  .respostas-section { display: none; }
+
+  .resposta-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+    transition: border-color 0.2s;
+  }
+
+  .resposta-card:hover { border-color: var(--blue); }
+
+  .resposta-header {
+    padding: 10px 14px;
+    background: var(--light);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .resposta-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .resposta-body {
+    padding: 14px;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .btn-copiar {
+    background: var(--blue);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s;
+  }
+
+  .btn-copiar:hover { background: var(--navy); }
+  .btn-copiar.copiado { background: var(--success); }
+
+  /* ── BTN NOVA ── */
+  .btn-nova {
+    width: 100%;
+    background: transparent;
+    color: var(--blue);
+    border: 2px solid var(--blue);
+    border-radius: var(--radius);
+    padding: 13px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: all 0.2s;
+  }
+
+  .btn-nova:hover { background: var(--blue); color: white; }
+
+  /* ── ALERT ── */
+  .alert {
+    background: #FEF3F2;
+    border: 1.5px solid #FECDCA;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    color: var(--error);
+    display: none;
+    margin-bottom: 12px;
+  }
+
+  /* ── DIVIDER ── */
+  .field-gap { margin-bottom: 14px; }
+
+  /* ── FOOTER ── */
+  .app-footer {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">⭐</div>
+  <h1>Responder <em>Reviews</em></h1>
+  <p>Grupo Point Beach · Guarujá</p>
+  <div class="tabs">
+    <a class="tab" href="index.html">📋 Cotação</a>
+    <div class="tab active">⭐ Reviews</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ALERT -->
+  <div class="alert" id="alertMsg"></div>
+
+  <!-- ── FORMULÁRIO ── -->
+  <div id="formSection">
+
+    <!-- 1. POUSADA -->
+    <div class="card">
+      <div class="card-title">🏨 Selecione a Pousada</div>
+      <div class="pousada-grid">
+
+        <button class="pousada-btn" data-pousada="canto" onclick="selecionarPousada(this)">
+          <span class="pb-check">✓</span>
+          <span class="pb-icon">🌊</span>
+          <div class="pb-name">Canto dos Mares</div>
+          <div class="pb-sub">50m · Mar Casado</div>
+        </button>
+
+        <button class="pousada-btn" data-pousada="jamboloes" onclick="selecionarPousada(this)">
+          <span class="pb-check">✓</span>
+          <span class="pb-icon">🌴</span>
+          <div class="pb-name">Jambolões</div>
+          <div class="pb-sub">100m · Pernambuco</div>
+        </button>
+
+        <button class="pousada-btn" data-pousada="acacias" onclick="selecionarPousada(this)">
+          <span class="pb-check">✓</span>
+          <span class="pb-icon">🌿</span>
+          <div class="pb-name">Acácias</div>
+          <div class="pb-sub">30m · Pernambuco</div>
+        </button>
+
+        <button class="pousada-btn" data-pousada="belnedito" onclick="selecionarPousada(this)">
+          <span class="pb-check">✓</span>
+          <span class="pb-icon">🍸</span>
+          <div class="pb-name">Belnedito GastroBar</div>
+          <div class="pb-sub">Rooftop · 18h–23h</div>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- 2. PLATAFORMA -->
+    <div class="card">
+      <div class="card-title">📱 Plataforma do Review</div>
+      <div class="platform-row">
+        <button class="platform-btn" data-plat="google" onclick="selecionarPlat(this)">
+          <span class="pf-icon">🔍</span>Google
+        </button>
+        <button class="platform-btn" data-plat="booking" onclick="selecionarPlat(this)">
+          <span class="pf-icon">🏨</span>Booking
+        </button>
+        <button class="platform-btn" data-plat="expedia" onclick="selecionarPlat(this)">
+          <span class="pf-icon">✈️</span>Expedia
+        </button>
+        <button class="platform-btn" data-plat="tripadvisor" onclick="selecionarPlat(this)">
+          <span class="pf-icon">🦉</span>TripAdvisor
+        </button>
+      </div>
+    </div>
+
+    <!-- 3. ESTRELAS + REVIEW -->
+    <div class="card">
+      <div class="card-title">💬 O Review</div>
+
+      <div class="field-gap">
+        <label class="field-label">Nota do hóspede</label>
+        <div class="stars-row" id="starsRow">
+          <button class="star-btn" data-star="1" onclick="selecionarStar(this)">⭐</button>
+          <button class="star-btn" data-star="2" onclick="selecionarStar(this)">⭐</button>
+          <button class="star-btn" data-star="3" onclick="selecionarStar(this)">⭐</button>
+          <button class="star-btn" data-star="4" onclick="selecionarStar(this)">⭐</button>
+          <button class="star-btn" data-star="5" onclick="selecionarStar(this)">⭐</button>
+        </div>
+      </div>
+
+      <div class="field-gap">
+        <label class="field-label">Nome do hóspede (opcional)</label>
+        <textarea id="nomeHospede" rows="1" placeholder="Ex: Maria Silva" style="resize:none;"></textarea>
+      </div>
+
+      <div>
+        <label class="field-label">Texto do review <span style="color:var(--error)">*</span></label>
+        <textarea id="reviewTexto" rows="5"
+          placeholder="Cole aqui o texto do review do hóspede..."></textarea>
+      </div>
+    </div>
+
+    <!-- 4. TOM -->
+    <div class="card">
+      <div class="card-title">🎭 Tom da Resposta</div>
+      <div class="tom-row">
+        <button class="tom-btn selected" data-tom="acolhedor" onclick="selecionarTom(this)">
+          <span class="tm-icon">🤗</span>Acolhedor
+        </button>
+        <button class="tom-btn" data-tom="profissional" onclick="selecionarTom(this)">
+          <span class="tm-icon">💼</span>Profissional
+        </button>
+        <button class="tom-btn" data-tom="entusiasmado" onclick="selecionarTom(this)">
+          <span class="tm-icon">🌟</span>Entusiasmado
+        </button>
+      </div>
+    </div>
+
+    <!-- BTN GERAR -->
+    <button class="btn-gerar" id="btnGerar" onclick="gerarRespostas()">
+      ✨ Gerar 3 Respostas
+    </button>
+
+  </div><!-- /formSection -->
+
+  <!-- ── LOADING ── -->
+  <div class="loading" id="loadingSection">
+    <div class="spinner"></div>
+    <p>Criando respostas personalizadas...</p>
+  </div>
+
+  <!-- ── RESPOSTAS ── -->
+  <div class="respostas-section" id="respostasSection">
+
+    <div class="card" style="border-left: 4px solid var(--gold); margin-bottom:16px;">
+      <div style="font-size:0.78rem; font-weight:700; color:var(--gold); margin-bottom:4px;">✅ 3 RESPOSTAS GERADAS</div>
+      <div style="font-size:0.82rem; color:var(--muted);">Escolha a que melhor combina e copie diretamente.</div>
+    </div>
+
+    <div id="respostasContainer"></div>
+
+    <button class="btn-nova" onclick="novaResposta()">↩️ Nova Resposta</button>
+
+  </div>
+
+  <div class="app-footer">
+    Grupo Point Beach · IA por Claude (Anthropic)<br>
+    <a href="index.html" style="color:var(--blue); text-decoration:none;">← Voltar para Cotação</a>
+  </div>
+
+</main>
+
+<script>
+// ── ESTADO ──────────────────────────────────────────────────────────────────
+let estado = {
+  pousada: null,
+  plataforma: null,
+  estrelas: null,
+  tom: 'acolhedor'
+};
+
+// ── CONTEXTO POR POUSADA ────────────────────────────────────────────────────
+const CONTEXTO = {
+  canto: {
+    nome: 'Pousada Canto dos Mares',
+    detalhes: `- 16 suítes variadas (casal, triplo, quádrupla, quíntupla)
+- Localização: 50 metros da Praia do Mar Casado, Guarujá/SP
+- Recepção 24 horas
+- Pet-friendly (pequeno/médio porte, R$35/diária)
+- Café da manhã incluso (8h–10h)
+- Piscina (8h–22h), sinuca, ping pong
+- Estacionamento gratuito (1 vaga/suíte)
+- DIFERENCIAL PRINCIPAL: Restaurante Belnedito GastroBar no rooftop com vista panorâmica para o Mar Casado, aberto das 18h às 23h todos os dias, aberto ao público em geral
+- WhatsApp: (13) 99739-0329`
+  },
+  jamboloes: {
+    nome: 'Pousada Point Beach Jambolões',
+    detalhes: `- 8 suítes (casal, tripla, família, quíntupla, master)
+- Localização: 100 metros da Praia do Pernambuco, Guarujá/SP
+- Recepção: 8h–22h
+- Pet-friendly (pequeno/médio porte)
+- Café da manhã incluso
+- Diferenciais únicos: jacuzzi, fire pit, piscina aquecida com área rasa, quiosque de churrasco
+- Cadeira e guarda-sol inclusos para a praia
+- Estacionamento gratuito
+- Site: pousadapointbeach.com.br`
+  },
+  acacias: {
+    nome: 'Pousada Point Beach Acácias',
+    detalhes: `- 18 suítes, capacidade até 65 hóspedes
+- Localização: 30 metros da Praia do Pernambuco — a mais próxima do grupo
+- Recepção: 8h–22h
+- NÃO aceita pets
+- Café da manhã incluso
+- Especializada em grupos grandes e excursões
+- Piscina, pergolado, área externa com redário
+- Super Família para até 9 pessoas
+- Estacionamento gratuito
+- Site: pousadaacacias.com.br`
+  },
+  belnedito: {
+    nome: 'Restaurante Belnedito GastroBar',
+    detalhes: `- Localização: rooftop da Pousada Canto dos Mares, Guarujá/SP
+- Vista panorâmica para a Praia do Mar Casado
+- Funcionamento: 18h às 23h todos os dias
+- Aberto ao público em geral (não exclusivo para hóspedes)
+- Conceito: drinques autorais e gastronomia autoral com vista para o mar
+- Instagram: @belnedito`
+  }
+};
+
+// ── SELETORES ───────────────────────────────────────────────────────────────
+function selecionarPousada(btn) {
+  document.querySelectorAll('.pousada-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  estado.pousada = btn.dataset.pousada;
+}
+
+function selecionarPlat(btn) {
+  document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  estado.plataforma = btn.dataset.plat;
+}
+
+function selecionarStar(btn) {
+  const val = parseInt(btn.dataset.star);
+  estado.estrelas = val;
+  document.querySelectorAll('.star-btn').forEach((b, i) => {
+    b.classList.toggle('active', i < val);
+  });
+}
+
+function selecionarTom(btn) {
+  document.querySelectorAll('.tom-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  estado.tom = btn.dataset.tom;
+}
+
+// ── VALIDAR ─────────────────────────────────────────────────────────────────
+function mostrarErro(msg) {
+  const el = document.getElementById('alertMsg');
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// ── GERAR ───────────────────────────────────────────────────────────────────
+async function gerarRespostas() {
+  const review = document.getElementById('reviewTexto').value.trim();
+  const nome = document.getElementById('nomeHospede').value.trim();
+
+  if (!estado.pousada) return mostrarErro('Selecione a pousada do review.');
+  if (!estado.plataforma) return mostrarErro('Selecione a plataforma.');
+  if (!estado.estrelas) return mostrarErro('Selecione a nota do hóspede.');
+  if (!review) return mostrarErro('Cole o texto do review antes de gerar.');
+
+  const ctx = CONTEXTO[estado.pousada];
+  const nomeHospede = nome || 'o hóspede';
+  const platNomes = { google:'Google', booking:'Booking.com', expedia:'Expedia', tripadvisor:'TripAdvisor' };
+  const plat = platNomes[estado.plataforma];
+  const estrelas = estado.estrelas;
+  const tom = estado.tom;
+
+  const tomInstrucao = {
+    acolhedor: 'Use um tom caloroso, acolhedor e humano. Como se fosse um anfitrião que realmente se importa.',
+    profissional: 'Use um tom profissional, objetivo e cortês. Respeitoso e formal mas não frio.',
+    entusiasmado: 'Use um tom entusiasmado, positivo e energético. Transmita paixão pela hospitalidade.'
+  }[tom];
+
+  const sistemPrompt = `Você é especialista em gestão de reputação online para pousadas de praia no Brasil. 
+Você conhece profundamente ${ctx.nome} e seus diferenciais.
+
+INFORMAÇÕES DA ${ctx.nome.toUpperCase()}:
+${ctx.detalhes}
+
+REGRAS CRÍTICAS:
+- Sempre chame de "Pousada" — NUNCA de "Hotel"
+- Distância correta da Canto dos Mares: 50 metros (nunca 200m)
+- Belnedito GastroBar é aberto ao público em geral, não exclusivo para hóspedes
+- Jambolões tem 8 suítes (nunca 16)
+- Acácias NÃO aceita pets
+- Seja autêntico e específico — evite respostas genéricas
+- NÃO use: "melhor custo-benefício", "atendimento personalizado", "encantados com sua visita"
+- Cada resposta deve ter entre 3 e 6 linhas
+- Mencione pelo menos 1 diferencial específico da pousada em cada resposta
+- Se a nota for baixa (1-3 estrelas): seja empático, assuma responsabilidade quando relevante, mostre que vai melhorar
+- Se a nota for alta (4-5 estrelas): agradeça de forma específica e convide a voltar
+
+Responda SOMENTE em JSON válido neste formato exato (sem texto fora do JSON):
+{
+  "respostas": [
+    {"tag": "Opção 1 — [descrição em 3 palavras]", "texto": "resposta aqui"},
+    {"tag": "Opção 2 — [descrição em 3 palavras]", "texto": "resposta aqui"},
+    {"tag": "Opção 3 — [descrição em 3 palavras]", "texto": "resposta aqui"}
+  ]
+}`;
+
+  const userPrompt = `Gere 3 respostas diferentes para este review na plataforma ${plat}:
+
+NOTA: ${estrelas} de 5 estrelas
+NOME DO HÓSPEDE: ${nomeHospede}
+REVIEW: "${review}"
+
+TOM DESEJADO: ${tomInstrucao}
+
+As 3 respostas devem ter abordagens DIFERENTES entre si — varie o ângulo, o que é destacado e a estrutura.`;
+
+  // UI → loading
+  document.getElementById('formSection').style.display = 'none';
+  document.getElementById('loadingSection').style.display = 'block';
+  document.getElementById('respostasSection').style.display = 'none';
+
+  try {
+    const resp = await fetch('https://quiet-lake-1bd3.cristianomunhoz73.workers.dev/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1200,
+        system: sistemPrompt,
+        messages: [{ role: 'user', content: userPrompt }]
+      })
+    });
+
+    if (!resp.ok) throw new Error('Erro na API: ' + resp.status);
+
+    const data = await resp.json();
+    const raw = data.content[0].text.trim();
+
+    // Parse JSON — remove possíveis backticks
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    renderRespostas(parsed.respostas, ctx.nome, plat, estrelas);
+
+  } catch (err) {
+    document.getElementById('formSection').style.display = 'block';
+    document.getElementById('loadingSection').style.display = 'none';
+    mostrarErro('Erro ao gerar respostas. Verifique a conexão e tente novamente.');
+    console.error(err);
+  }
+}
+
+// ── RENDER ──────────────────────────────────────────────────────────────────
+function renderRespostas(respostas, nomePousada, plat, estrelas) {
+  document.getElementById('loadingSection').style.display = 'none';
+  document.getElementById('respostasSection').style.display = 'block';
+
+  const stars = '⭐'.repeat(estrelas) + '☆'.repeat(5 - estrelas);
+  const container = document.getElementById('respostasContainer');
+
+  // Info bar
+  container.innerHTML = `
+    <div style="background:#EEF3FB; border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.78rem; color:var(--blue);">
+      <strong>${nomePousada}</strong> · ${plat} · ${stars}
+    </div>
+  `;
+
+  respostas.forEach((r, i) => {
+    const div = document.createElement('div');
+    div.className = 'resposta-card';
+    div.innerHTML = `
+      <div class="resposta-header">
+        <span class="resposta-tag">${r.tag}</span>
+        <button class="btn-copiar" onclick="copiar(this, ${i})">
+          📋 Copiar
+        </button>
+      </div>
+      <div class="resposta-body" id="resp-${i}">${r.texto}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ── COPIAR ──────────────────────────────────────────────────────────────────
+async function copiar(btn, idx) {
+  const texto = document.getElementById('resp-' + idx).textContent;
+  try {
+    await navigator.clipboard.writeText(texto);
+    btn.textContent = '✅ Copiado!';
+    btn.classList.add('copiado');
+    setTimeout(() => {
+      btn.innerHTML = '📋 Copiar';
+      btn.classList.remove('copiado');
+    }, 2000);
+  } catch {
+    // Fallback para mobile
+    const ta = document.createElement('textarea');
+    ta.value = texto;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.innerHTML = '📋 Copiar', 2000);
+  }
+}
+
+// ── NOVA RESPOSTA ────────────────────────────────────────────────────────────
+function novaResposta() {
+  document.getElementById('respostasSection').style.display = 'none';
+  document.getElementById('formSection').style.display = 'block';
+  document.getElementById('reviewTexto').value = '';
+  document.getElementById('nomeHospede').value = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
