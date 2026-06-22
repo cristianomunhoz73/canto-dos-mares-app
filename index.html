@@ -18,13 +18,20 @@
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--fb);background:linear-gradient(160deg,#071526 0%,#0D2B55 50%,#1A3A6C 100%);min-height:100vh;padding:0 0 60px}
-.app-header{text-align:center;padding:36px 20px 28px;position:relative}
+.app-header{text-align:center;padding:36px 20px 0;position:relative}
 .app-header::after{content:'';display:block;width:60px;height:2px;background:var(--gold);margin:16px auto 0;opacity:.6}
 .app-logo-wave{font-size:32px;margin-bottom:10px;display:block}
 .app-titulo{font-family:var(--fd);font-size:clamp(20px,5vw,28px);color:white;font-weight:700;line-height:1.2;margin-bottom:4px}
 .app-titulo em{font-style:italic;color:var(--gold)}
-.app-sub{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4)}
-.container{max-width:680px;margin:0 auto;padding:0 16px}
+.app-sub{font-family:var(--fm);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px}
+
+/* ── TABS NAVEGAÇÃO ── */
+.app-tabs{display:flex;border-top:1px solid rgba(255,255,255,.15);margin-top:16px}
+.app-tab{flex:1;padding:13px 8px;font-size:12px;font-weight:700;font-family:var(--fb);color:rgba(255,255,255,.5);text-align:center;text-decoration:none;border-bottom:3px solid transparent;transition:.2s;cursor:pointer;letter-spacing:.3px}
+.app-tab:hover{color:rgba(255,255,255,.8)}
+.app-tab.active{color:white;border-bottom-color:var(--gold)}
+
+.container{max-width:680px;margin:0 auto;padding:0 16px;padding-top:24px}
 .card{background:white;border-radius:20px;padding:28px 24px;margin-bottom:16px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
 .modo-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px}
 .modo-btn{padding:11px 8px;border-radius:12px;border:2px solid var(--borda);background:var(--fundo);color:var(--soft);font-size:13px;font-weight:600;cursor:pointer;transition:.2s;text-align:center;font-family:var(--fb)}
@@ -82,6 +89,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--mar3)}
   <span class="app-logo-wave">🌊</span>
   <h1 class="app-titulo">Gerador de <em>Cotação</em></h1>
   <p class="app-sub">Pousada Canto dos Mares · Guarujá</p>
+  <div class="app-tabs">
+    <div class="app-tab active">📋 Cotação</div>
+    <a class="app-tab" href="reviews.html">⭐ Reviews</a>
+  </div>
 </div>
 <div class="container">
   <div class="card">
@@ -343,7 +354,6 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
       if(keyMatch)suiteDetectada=keyMatch[1].trim().toUpperCase().replace(/[^A-Z\s]/g,'').trim();
       const msgLimpa=texto.replace(/SUITE_KEY:[^\n]*[\n\r]*-{0,3}[\n\r]*/,'').trim();
       const slug=SUITE_SLUGS[suiteDetectada]||SUITE_SLUGS[suiteDetectada.trim()];
-      // ✅ LINK ATUALIZADO: passa suite_origem para preservar o quarto na navegação
       const linkGaleria=slug?'\n\n📸 Veja as fotos do seu quarto:\n'+GALERIA_BASE+'?suite='+slug+'&suite_origem='+slug:'';
       document.getElementById('msg-box').textContent=msgLimpa+linkGaleria;
     }
@@ -362,7 +372,6 @@ function atualizarBotaoGaleria(){
   const chave=suiteDetectada.trim().toUpperCase();
   const slug=SUITE_SLUGS[chave]||SUITE_SLUGS[suiteDetectada];
   if(slug){
-    // ✅ BOTÃO GALERIA: também passa suite_origem
     btn.href=GALERIA_BASE+'?suite='+slug+'&suite_origem='+slug;
     btn.style.display='flex';
   } else {
