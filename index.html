@@ -351,7 +351,7 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
     } else {
       const texto=data.content?.[0]?.text||'';
       const keyMatch=texto.match(/SUITE_KEY:\s*([^\n\r]+)/);
-      if(keyMatch)suiteDetectada=keyMatch[1].trim().toUpperCase().replace(/[^A-Z\s]/g,'').trim();
+      if(keyMatch){suiteDetectada=keyMatch[1].trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z\s]/g,'').trim();}
       const msgLimpa=texto.replace(/SUITE_KEY:[^\n]*[\n\r]*-{0,3}[\n\r]*/,'').trim();
       const slug=SUITE_SLUGS[suiteDetectada]||SUITE_SLUGS[suiteDetectada.trim()];
       const linkGaleria=slug?'\n\n📸 Veja as fotos do seu quarto:\n'+GALERIA_BASE+'?suite='+slug+'&suite_origem='+slug:'';
@@ -369,7 +369,7 @@ Regras: calcule noites; omita crianças se 0; omita obs se vazia.`;
 
 function atualizarBotaoGaleria(){
   const btn=document.getElementById('btn-galeria');
-  const chave=suiteDetectada.trim().toUpperCase();
+  const chave=suiteDetectada.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z\s]/g,'').trim();
   const slug=SUITE_SLUGS[chave]||SUITE_SLUGS[suiteDetectada];
   if(slug){
     btn.href=GALERIA_BASE+'?suite='+slug+'&suite_origem='+slug;
